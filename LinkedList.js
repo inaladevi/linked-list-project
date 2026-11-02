@@ -2,18 +2,18 @@ import Node from "./Node.js";
 
 class LinkedList {
 constructor() {
-    this.head = null;
+    this.headNode = null;
 }
 
 append(value) {
     const newNode = new Node(value);
 
-    if (this.head === null) {
-        this.head = newNode;
+    if (this.headNode === null) {
+        this.headNode = newNode;
         return;
     }
 
-    let current = this.head;
+    let current = this.headNode;
 
     while (current.nextNode !== null) {
         current = current.nextNode;
@@ -23,14 +23,14 @@ append(value) {
 }
 
 prepend(value) {
-    const newNode = new Node(value, this.head);
+    const newNode = new Node(value, this.headNode);
 
-    this.head = newNode;
+    this.headNode = newNode;
 }
 
 size() {
     let count = 0;
-    let current = this.head;
+    let current = this.headNode;
 
     while (current !== null) {
         count++;
@@ -40,14 +40,14 @@ size() {
 }
 
 head() {
-    if (this.head === null) return undefined;
-    return this.head.value;
+    if (this.headNode === null) return undefined;
+    return this.headNode.value;
 }
 
 tail() {
-    if (this.head === null) return undefined;
+    if (this.headNode === null) return undefined;
 
-    let current = this.head;
+    let current = this.headNode;
     while (current.nextNode !== null) {
         current = current.nextNode;
     }
@@ -55,7 +55,7 @@ tail() {
 }
 
 at(index) {
-    let current = this.head;
+    let current = this.headNode;
     let count = 0;
 
     while (current !== null) {
@@ -68,7 +68,7 @@ at(index) {
 }
 
 contains(value) {
-    let current = this.head;
+    let current = this.headNode;
 
     while (current !== null) {
         if (current.value === value) return true;
@@ -78,7 +78,7 @@ contains(value) {
 }
 
 findIndex(value) {
-    let current = this.head;
+    let current = this.headNode;
     let count = 0;
 
     while (current !== null) {
@@ -91,7 +91,7 @@ findIndex(value) {
 
 toString() {
     let result = "";
-    let current = this.head;
+    let current = this.headNode;
 
     while (current !== null) {
         result += `( ${current.value} ) -> `;
@@ -100,16 +100,27 @@ toString() {
     return result + "null";
 }
 
+// Removes the last node and returns its value.
 pop() {
-    if (this.head === null) return undefined;
+    if (this.headNode === null) return undefined;
 
-    const poppedValue = this.head.value;
-    this.head = this.head.nextNode;
+    if (this.headNode.nextNode === null) {
+        const onlyValue = this.headNode.value;
+        this.headNode = null;
+        return onlyValue;
+    }
+
+    let previousNode = this.headNode;
+    while (previousNode.nextNode.nextNode !== null) {
+        previousNode = previousNode.nextNode;
+    }
+    const poppedValue = previousNode.nextNode.value;
+    previousNode.nextNode = null;
     return poppedValue;
 }
 
 atNode(index) {
-    let current = this.head;
+    let current = this.headNode;
     let count = 0;
     while (current !== null) {
         if (count === index) return current; 
@@ -149,7 +160,7 @@ removeAt(index) {
     }
 
     if (index === 0) {
-      this.pop();
+      this.headNode = this.headNode.nextNode;
       return;
     }
 
